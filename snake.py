@@ -21,6 +21,7 @@ class SnakeGame:
         self.scale = scale
         self.snake = Snake(game=self)
         self.food = Food(game=self)
+        self.movements = 0
 
     # Run the game until the snake crashes or hits its own tail
     def run(self):
@@ -29,6 +30,7 @@ class SnakeGame:
             next_move = self.controller.update()
             if next_move: self.snake.v = next_move
             self.snake.move()
+            self.movements += 1 
             if not self.snake.p.within(self.grid):
                 running = False
                 message = 'Game over! You crashed into the wall!'

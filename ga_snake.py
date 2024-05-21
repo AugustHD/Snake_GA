@@ -8,12 +8,16 @@
 from snake import SnakeGame
 # Import the GAController class from the ga_controller module
 from ga_controller import GAController
+from ga_models.ga_simple import SimpleModel
 
 # This condition checks if this script is being run directly and not imported as a module
 if __name__ == '__main__':
+
+    model = SimpleModel(dims=(8, 4))
     # Create an instance of SnakeGame
     game = SnakeGame()
     # Create an instance of GAController with the game instance as an argument
-    controller = GAController(game)
+    controller = GAController(game, display=True, model=model)
+
     # Start running the game
     game.run()

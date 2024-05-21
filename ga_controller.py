@@ -11,10 +11,11 @@ from game_controller import GameController
 # GAController is a class that inherits from GameController
 class GAController(GameController):
     # The constructor initializes the game, display, and other properties
-    def __init__(self, game, display=False):
+    def __init__(self, game, display=False, model=None):
         self.display = display
         self.game = game
         self.game.controller = self
+        self.model = model
         if self.display:
             pygame.init()
             self.screen = pygame.display.set_mode((game.grid.x * game.scale, game.grid.y * game.scale))
@@ -33,7 +34,7 @@ class GAController(GameController):
         # observation space
 
         # delta north, east, south, west
-        dn = self.snake.p.y
+        dn = self.game.snake.p.y
         de = self.game.grid.x - self.game.snake.p.x
         ds = self.game.grid.y - self.game.snake.p.y
         dw = self.game.snake.p.x
@@ -45,7 +46,10 @@ class GAController(GameController):
         # score
         s = self.game.snake.score
 
-        obs = (dn, de, ds, dw, dfx, dfy, s)
+        # movements
+        m = self.game.movements
+
+        obs = (dn, de, ds, dw, dfx, dfy, s, m)
 
         # action space
         next_move = self.action_space[self.model.action(obs)]
