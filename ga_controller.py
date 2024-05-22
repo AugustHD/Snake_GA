@@ -46,10 +46,7 @@ class GAController(GameController):
         # score
         s = self.game.snake.score
 
-        # movements
-        m = self.game.movements
-
-        obs = (dn, de, ds, dw, dfx, dfy, s, m)
+        obs = (dn, de, ds, dw, dfx, dfy, s)
 
         # action space
         next_move = self.action_space[self.model.action(obs)]

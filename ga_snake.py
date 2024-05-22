@@ -12,12 +12,15 @@ from ga_models.ga_simple import SimpleModel
 
 # This condition checks if this script is being run directly and not imported as a module
 if __name__ == '__main__':
+    num_runs = 100
+    results = []
 
-    model = SimpleModel(dims=(8, 4))
-    # Create an instance of SnakeGame
-    game = SnakeGame()
-    # Create an instance of GAController with the game instance as an argument
-    controller = GAController(game, display=True, model=model)
+    for _ in range(num_runs):
+        model = SimpleModel(dims=(7, 4))
+        # Create an instance of SnakeGame
+        game = SnakeGame()
+        # Create an instance of GAController with the game instance as an argument
+        controller = GAController(game, display=True, model=model)
 
-    # Start running the game
-    game.run()
+        # Start running the game
+        steps, score = game.run()
