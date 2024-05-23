@@ -54,11 +54,8 @@ class SimpleModel(GAModel):
         baby.DNA = baby_DNA
         return baby
     
-    # Defines the fitness function for the model
-    def fitness(individual):
-        score = individual.score
-        steps = individual.steps
-        return score * score / (steps + 1)
+    def fitness(self, steps, score):
+        return (score * score) / (steps + 1)
 
     # Return the DNA of the model
     def DNA(self):
