@@ -40,6 +40,9 @@ if __name__ == '__main__':
         max_fitness = max(fitness_scores, key=lambda x: x[0])[0]
         print(f"Max fitness over {generations} generations: {max_fitness}")
 
+        # This selection process below involves cutting 50% of the population based on fitness.
+        # It is likely not the optimal solution to do selection, and we need to research this.
+
         # Sort the fitness_scores list in descending order based on the fitness score
         fitness_scores.sort(key=lambda x: x[0], reverse=True)
 
