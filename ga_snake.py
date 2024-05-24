@@ -12,49 +12,55 @@ from snake import SnakeGame
 from ga_controller import GAController
 from ga_models.ga_simple import SimpleModel
 
-class Population:
-    def __init__(self, population_size: int, dims: Tuple[int, ...]):
-        self.agents = [SimpleModel(dims=dims) for _ in range(population_size)]
-        self.population_size = population_size
-        self.dims = dims
-
-    def evolve(self, mutation_rate: float) -> None:
-        new_generation = []
-        for _ in range(self.population_size):
-            parent1, parent2 = self.select_parents()
-            if parent1 and parent2:
-                child = parent1 + parent2
-                child.mutate(mutation_rate)
-                new_generation.append(child)
-        self.agents = new_generation
-
-    def select_parents(self) -> Tuple[SimpleModel, SimpleModel]:
-        return tuple(random.sample(self.agents, 2))
-
-    def evaluate(self, evaluate_function) -> None:
-        for agent in self.agents:
-            agent.fitness = evaluate_function(agent)
-
 if __name__ == '__main__':
     population_size = 100
     generations = 100
+    population = []
 
-    population = [SimpleModel(dims=(7, 10, 4)) for _ in range(population_size)]
-
+    # Create a population of SimpleModel instances
+    for i in range(population_size):
+        population.append(SimpleModel(dims=(7, 10, 4)))
+    
+    # Run the genetic algorithm for a number of generations
     for generation in range(generations):
         fitness_scores = []
 
+        # Run the game for each individual in the population
         for individual in population:
             game = SnakeGame()
             controller = GAController(game, display=False, model=individual)
-            SimpleModel.mutate(individual, 0.5)
             steps, score = game.run()
-            
-            fitness = individual.fitness(steps, score)
-
+            if hasattr(individual, 'fitness'):
+                fitness = individual.fitness(steps, score)
+            else:
+                print(f"Individual of type {type(individual)} does not have a fitness method")
             fitness_scores.append((fitness, individual))
             print(f"Generation {generation + 1}, Individual: Steps = {steps}, Score = {score}, Fitness = {fitness}")
 
+        max_fitness = max(fitness_scores, key=lambda x: x[0])[0]
+        print(f"Max fitness over {generations} generations: {max_fitness}")
+
+        # Sort the fitness_scores list in descending order based on the fitness score
+        fitness_scores.sort(key=lambda x: x[0], reverse=True)
+
+        # Calculate the number of individuals to keep
+        num_to_keep = len(fitness_scores) // 2
+
+        # Keep the first half of the list
+        fitness_scores = fitness_scores[:num_to_keep]
+
+        # Extract the individuals from the fitness_scores list
+        population = [individual for fitness, individual in fitness_scores]
+        print(f"Population size: {len(population)}")
+
+        # Create new individuals by crossing over the existing ones
+        for individual in population:
+            partner = random.choice(population)
+            child = individual.__add__(partner)
+            population.append(child)
+        print(f"Population size after crossover: {len(population)}")
         
-    max_fitness = max(fitness_scores, key=lambda x: x[0])[0]
-    print(f"Max fitness over {generations} generations: {max_fitness}")
+        # Mutate the population
+        for individual in population:
+            individual.mutate(0.1)
+    

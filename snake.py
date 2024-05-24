@@ -43,7 +43,7 @@ class SnakeGame:
             if (self.steps + 1) / (self.snake.score + 1) > 100:
                 running = False
                 message = 'Game over! too many steps!'
-        print(f'{message} ... Score: {self.snake.score} steps: {self.steps}')
+    #    print(f'{message} ... Score: {self.snake.score} steps: {self.steps}')
         score = self.snake.score
         steps = self.steps
         self.reset()
