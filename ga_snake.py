@@ -51,14 +51,18 @@ if __name__ == '__main__':
 
         # Extract the individuals from the fitness_scores list
         population = [individual for fitness, individual in fitness_scores]
-        print(f"Population size: {len(population)}")
+        # print(f"Population size: {len(population)}")
 
         # Create new individuals by crossing over the existing ones
+        children = []
         for individual in population:
             partner = random.choice(population)
             child = individual.__add__(partner)
-            population.append(child)
-        print(f"Population size after crossover: {len(population)}")
+            children.append(child)
+
+        # Add the children to the population
+        population.extend(children)
+        # print(f"Population size after crossover: {len(population)}")
         
         # Mutate the population
         for individual in population:
