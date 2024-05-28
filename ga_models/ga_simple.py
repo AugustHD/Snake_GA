@@ -42,7 +42,7 @@ class SimpleModel(GAModel):
             col = random.randint(0, self.DNA[random_layer].shape[1] - 1)
             self.DNA[random_layer][row][col] = random.uniform(-1, 1)
 
-    # Define the addition operation for two models
+    # Define the addition operation for two models (Uniform crossover)
     def __add__(self, other):
         baby_DNA = []
         for mom, dad in zip(self.DNA, other.DNA):
@@ -55,7 +55,7 @@ class SimpleModel(GAModel):
         return baby
     
     def fitness(self, steps: int, score: int):
-        return (score * score) / (steps + 1)
+        return (score * score) + 1 / (steps + 1)
 
     # Return the DNA of the model
     def DNA(self):
