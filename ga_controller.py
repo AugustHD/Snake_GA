@@ -11,17 +11,19 @@ from game_controller import GameController
 # GAController is a class that inherits from GameController
 class GAController(GameController):
     # The constructor initializes the game, display, and other properties
-    def __init__(self, game, display=False):
+    def __init__(self, game, display=False, model=None):
         self.display = display
         self.game = game
         self.game.controller = self
+        self.model = model
+        self.action_space = (Vector(0, -1), Vector(0, 1), Vector(1, 0), Vector(-1, 0))
         if self.display:
             pygame.init()
             self.screen = pygame.display.set_mode((game.grid.x * game.scale, game.grid.y * game.scale))
             self.clock = pygame.time.Clock()
             self.color_snake_head = (0, 255, 0)
             self.color_food = (255, 0, 0)
-            self.action_space = (Vector(0, -1), Vector(0, 1), Vector(1, 0), Vector(-1, 0))
+
 
     # Destructor to quit pygame when the object is deleted
     def __del__(self):
@@ -33,7 +35,7 @@ class GAController(GameController):
         # observation space
 
         # delta north, east, south, west
-        dn = self.snake.p.y
+        dn = self.game.snake.p.y
         de = self.game.grid.x - self.game.snake.p.x
         ds = self.game.grid.y - self.game.snake.p.y
         dw = self.game.snake.p.x

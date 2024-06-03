@@ -12,14 +12,14 @@ from ga_models.activation import sigmoid, tanh, softmax
 # Define a simple model for a genetic algorithm
 class SimpleModel(GAModel):
     # Initialize the model with a tuple of dimensions
-    def __init__(self, *, dims: Tuple[int, ...]):
+    def __init__(self, *, dims: Tuple[int, ...]): # Describes the NUMBER of dimensions of our neural network (input, hidden, output)
         assert len(dims) >= 2, 'Error: dims must be two or higher.'
         self.dims = dims
         self.DNA = []
         # Initialize the DNA with random values
         for i, dim in enumerate(dims):
             if i < len(dims) - 1:
-                self.DNA.append(np.random.rand(dim, dims[i+1]))
+                self.DNA.append(np.random.rand(dim, dims[i+1])) # Appends a randomly weighted neural network to our snake-agent.
 
     # Update the model based on the observation
     def update(self, obs: Sequence) -> Tuple[int, ...]:
@@ -42,7 +42,7 @@ class SimpleModel(GAModel):
             col = random.randint(0, self.DNA[random_layer].shape[1] - 1)
             self.DNA[random_layer][row][col] = random.uniform(-1, 1)
 
-    # Define the addition operation for two models
+    # Define the addition operation for two models (Uniform crossover)
     def __add__(self, other):
         baby_DNA = []
         for mom, dad in zip(self.DNA, other.DNA):
@@ -53,6 +53,9 @@ class SimpleModel(GAModel):
         baby = type(self)(dims=self.dims)
         baby.DNA = baby_DNA
         return baby
+    
+    def fitness(self, steps: int, score: int):
+        return (score * score) + 1 / (steps + 1)
 
     # Return the DNA of the model
     def DNA(self):

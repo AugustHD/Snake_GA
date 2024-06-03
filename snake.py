@@ -21,6 +21,7 @@ class SnakeGame:
         self.scale = scale
         self.snake = Snake(game=self)
         self.food = Food(game=self)
+        self.steps = 0
 
     # Run the game until the snake crashes or hits its own tail
     def run(self):
@@ -29,6 +30,7 @@ class SnakeGame:
             next_move = self.controller.update()
             if next_move: self.snake.v = next_move
             self.snake.move()
+            self.steps += 1 
             if not self.snake.p.within(self.grid):
                 running = False
                 message = 'Game over! You crashed into the wall!'
@@ -38,7 +40,20 @@ class SnakeGame:
             if self.snake.p == self.food.p:
                 self.snake.add_score()
                 self.food = Food(game=self)
-        print(f'{message} ... Score: {self.snake.score}')
+            if (self.steps + 1) / (self.snake.score + 1) > 100:
+                running = False
+                message = 'Game over! too many steps!'
+    #    print(f'{message} ... Score: {self.snake.score} steps: {self.steps}')
+        score = self.snake.score
+        steps = self.steps
+        self.reset()
+        return steps, score
+    
+    def reset(self):
+        self.snake = Snake(game=self)
+        self.food = Food(game=self)
+        self.steps = 0
+        self.score = 0
 
 # Define a class for the food in the game
 class Food:
