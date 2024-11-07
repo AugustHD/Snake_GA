@@ -1,8 +1,3 @@
-# This Python code defines a SimpleModel class for a genetic algorithm. 
-# The class includes methods for updating the model based on an observation, 
-# determining the action based on an observation, mutating the DNA based on a mutation rate, 
-# defining the addition operation for two models, and returning the DNA of the model.
-
 import random
 from typing import Protocol, Tuple, List, Sequence
 import numpy as np
